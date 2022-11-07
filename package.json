@@ -1,0 +1,33 @@
+{
+  "name": "graphql-mongodb",
+  "version": "1.0.0",
+  "description": "App node usando graphql y mongodb",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "env-cmd -f .env.desarrollo nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pacomendieta/Graphql-mongodb.git"
+  },
+  "keywords": [
+    "node",
+    "graphql",
+    "mongodb"
+  ],
+  "author": "FM",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pacomendieta/Graphql-mongodb/issues"
+  },
+  "homepage": "https://github.com/pacomendieta/Graphql-mongodb#readme",
+  "dependencies": {
+    "env-cmd": "^10.1.0",
+    "express": "^4.18.2",
+    "graphql": "^15.8.0",
+    "graphql-server-express": "^1.4.1",
+    "graphql-tools": "^8.3.10",
+    "mongoose": "^6.7.1"
+  }
+}
