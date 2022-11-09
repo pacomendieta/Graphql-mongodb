@@ -1,10 +1,15 @@
-const express = require('express')
+import express from 'express'
 const app = express();
-const mongoose = require('mongoose')
-const { graphqlExpress, graphiqlExpress} = require('graphql-server-express')
+import mongoose from 'mongoose'
+//import { graphqlExpress, graphiqlExpress} from 'graphql-server-express'
+//import  graphiqlExpress from 'apollo-server-express'
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
+import { expressMiddleware } from '@apollo/server/express4';
+//const { graphqlExpress, graphiqlExpress} = require('@apollo/server')
 //const { makeExecutableSchema } = require('@graphql-tools/schema')
-const { makeExecutableSchema } = require('graphql-tools')
-const bodyParser=require('body-parser')
+import { makeExecutableSchema } from 'graphql-tools'
+import bodyParser from 'body-parser'
 
 //Conectar MongoDB con Mongoose
 mongoose.connect(process.env.urimongodb)
@@ -23,11 +28,8 @@ type Mutation {
   fake:Boolean
 }
 `
-
-const schema = makeExecutableSchema({
-    typeDefs: typeDefs,
-    resolvers: {
-      Query:{
+const resolvers = {
+    Query:{
         tipo(rootvalue) {
             return true
         },
@@ -37,15 +39,33 @@ const schema = makeExecutableSchema({
           return true
         }
       }
-   
-}})
+}
 
+
+const schema = makeExecutableSchema({
+    typeDefs: typeDefs,
+    resolvers: resolvers   
+})
+
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+
+
+  
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
+  });
+  console.log(`🚀  Server ready at: ${url}`);
+  app.use('/graphql', bodyParser.json(),expressMiddleware(server))
 
 //Servir GraphiQL en /graphiql
-app.use('/graphql',  bodyParser.json(), graphqlExpress({schema:schema}))
-app.use('/graphiql',  graphiqlExpress({ endpointURL: '/graphql'}))
+//app.use('/graphql',  bodyParser.json(), graphqlExpress({schema:schema}))
+//app.use('/graphiql',  graphiqlExpress({ endpointURL: '/graphql'}))
+//app.use('/graphiql',expresServer )
 
 //Servidor HTTP
 app.listen( process.env.puerto, ()=>{
-    console.log("Servidor iniciado en puerto ", process.env.puerto)
+    console.log("Servidor express iniciado en puerto ", process.env.puerto)
 })
