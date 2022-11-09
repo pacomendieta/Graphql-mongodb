@@ -17,17 +17,28 @@ type Alert {
     mensaje: String
 }
 type Query {
-  _:Boolean
+  tipo:Boolean
 }
 type Mutation {
-  _:Boolean
+  fake:Boolean
 }
 `
 
 const schema = makeExecutableSchema({
     typeDefs: typeDefs,
-    resolvers: {}
-})
+    resolvers: {
+      Query:{
+        tipo(rootvalue) {
+            return true
+        },
+      },
+      Mutation: {
+        fake(rootvalue) {
+          return true
+        }
+      }
+   
+}})
 
 
 //Servir GraphiQL en /graphiql

@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "env-cmd -f .env.desarrollo nodemon app.js",
-    "preinstall": "npx npm-force-resolutions",
-    "postinstall": "node fix-package-lock.js"
+    "preinstall": "npx npm-force-resolutions"
   },
   "repository": {
     "type": "git",
@@ -24,13 +23,7 @@
     "url": "https://github.com/pacomendieta/Graphql-mongodb/issues"
   },
   "homepage": "https://github.com/pacomendieta/Graphql-mongodb#readme",
-  "resolutions": {
-    "graphql": "15.8.0"
-  },
-  "overrides": {
-    "graphql": "15.8.0",
-    "**/graphql": "15.8.0"
-  },
+
   "dependencies": {
     "body-parser": "^1.20.1",
     "env-cmd": "^10.1.0",
@@ -38,6 +31,17 @@
     "graphql": "^16.6.0",
     "graphql-server-express": "^1.4.1",
     "graphql-tools": "^8.3.11",
-    "mongoose": "^6.7.2"
+    "mongoose": "^6.7.2",
+    "nodemon": "^2.0.20"
+  },
+
+  
+  "overrides": {
+      "graphql":{
+         ".": "16.6.0",
+         "bar": "16.6.0",
+         "*": "16.6.0" 
+       }
   }
+
 }
