@@ -7,13 +7,18 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { expressMiddleware } from '@apollo/server/express4';
 //const { graphqlExpress, graphiqlExpress} = require('@apollo/server')
-//const { makeExecutableSchema } = require('@graphql-tools/schema')
-import { makeExecutableSchema } from 'graphql-tools'
+import { makeExecutableSchema } from '@graphql-tools/schema'
+//import { makeExecutableSchema } from 'graphql-tools'
 import bodyParser from 'body-parser'
 
+import courseTypes from     './db.graphql/types/course.types.js'
+import courseResolvers from './db.graphql/resolvers/course.resolvers.js'
+
+
+
 //Conectar MongoDB con Mongoose
-mongoose.connect(process.env.urimongodb)
-.then( (mongo)=>console.log("Conexión a mongoDB OK.") )
+mongoose.connect(process.env.urimongodb, {useNewUrlParser:true})
+.then( (mongo)=>console.log("Conexión a mongoDB OK.",mongo.models) )
 .catch( (error)=>console.log("Error en conexión a mongoDB") )
 
 //Definicion del Schema en GraphQL
@@ -43,14 +48,11 @@ const resolvers = {
 
 
 const schema = makeExecutableSchema({
-    typeDefs: typeDefs,
-    resolvers: resolvers   
+    typeDefs: [typeDefs,courseTypes], //está combinando typeDefs y courseTypes
+    resolvers: [resolvers,courseResolvers] // está combinando resolvers con courseResolvers   
 })
 
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-  });
+const server = new ApolloServer( {schema});
 
 
   
