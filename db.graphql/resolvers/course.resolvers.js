@@ -11,16 +11,17 @@ const resolvers = {
             return bdcursos.find((curso)=>curso.id ==id )
         },
         async getAll(rootvalue) {
-            let curso = await Cursos.create({title:"tres", views:33})
+            let cursos = await Cursos.find()
             ;
-            await curso.save()
+           return cursos;
         }
     },
     Mutation:{
-        addCurso(rootvalue, {input}) {
+        async addCurso(rootvalue, {input}) {
             const {title,views} = input
-            const curso = {title,views,id:String(bdcursos.length +1)}
-            bdcursos.push(curso)
+            let curso = {title,views,id:String(bdcursos.length +1)}
+            curso = await Cursos.create( curso )
+            await curso.save()
             return curso
         },
         updateCurso(rootvalue, {id,input} ){
