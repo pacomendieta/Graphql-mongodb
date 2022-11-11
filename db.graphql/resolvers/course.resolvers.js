@@ -7,12 +7,18 @@ const resolvers = {
         getCursos(rootvalue, args) {
             return bdcursos.slice(args.pagina*args.porpagina, (args.pagina+1)*args.porpagina)
         },
-        getCurso(rootvalue, {id} ) {
-            return bdcursos.find((curso)=>curso.id ==id )
+        async getCurso(rootvalue, {title} ) {
+            let curso;
+            Cursos.find(  {title:title}, function(error,docs){
+                console.log("docs:", docs)
+                console.log("error:", error)
+                curso = docs[0]
+            }  )
+            let cursos =  await Cursos.find(  {title:title} ).exec()
+            return cursos[0]
         },
         async getAll(rootvalue) {
-            let cursos = await Cursos.find()
-            ;
+           let cursos = await Cursos.find()
            return cursos;
         }
     },

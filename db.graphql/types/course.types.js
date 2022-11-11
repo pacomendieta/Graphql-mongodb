@@ -8,7 +8,7 @@ input CursoInput {
 }
 type Curso {
     id: ID
-    title: String!
+    title: String
     views: Int
 }
 type Mensaje {
@@ -16,7 +16,7 @@ type Mensaje {
 }
 type Query {
     getCursos(pagina:Int=0,porpagina:Int=5): [Curso]
-    getCurso(id:ID):Curso
+    getCurso(title:String):Curso
     getAll:[Curso]
 }
 type Mutation {

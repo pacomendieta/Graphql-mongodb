@@ -18,7 +18,7 @@ import courseResolvers from './db.graphql/resolvers/course.resolvers.js'
 
 //Conectar MongoDB con Mongoose
 mongoose.connect(process.env.urimongodb, {useNewUrlParser:true})
-.then( (mongo)=>console.log("Conexión a mongoDB OK.",mongo.models) )
+.then( (mongo)=>console.log("Conexión a mongoDB OK. URI=",process.env.urimongodb) )
 .catch( (error)=>console.log("Error en conexión a mongoDB") )
 
 //Definicion del Schema en GraphQL

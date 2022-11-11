@@ -7,4 +7,4 @@ const cursoSchema = new mongoose.Schema({
     views: Number
 })
 
-export default mongoose.model('Cursos',cursoSchema)
+export default mongoose.model('CURSOS',cursoSchema)
