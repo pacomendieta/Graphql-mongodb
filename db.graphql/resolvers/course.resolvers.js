@@ -1,20 +1,26 @@
 
 let bdcursos = [{ id:1, title:"uno", views:1000} ]
 import Cursos from "../../models/curso.js"
-
+let cursos;
 const resolvers = {
     Query:{
-        getCursos(rootvalue, args) {
-            return bdcursos.slice(args.pagina*args.porpagina, (args.pagina+1)*args.porpagina)
+        async getCursos(rootvalue, args) {
+            const {porpagina,pagina} = args
+            //const cursos = await Cursos.find().limit(porpagina).skip( (pagina-1)*porpagina)
+            cursos = Cursos.find()
+            if ( pagina > 0) {
+                cursos.limit(porpagina).skip( (pagina-1)*porpagina)   
+            }
+            cursos = await cursos
+            return cursos
         },
+
         async getCurso(rootvalue, {title} ) {
-            let curso;
-            Cursos.find(  {title:title}, function(error,docs){
-                console.log("docs:", docs)
-                console.log("error:", error)
-                curso = docs[0]
-            }  )
-            let cursos =  await Cursos.find(  {title:title} ).exec()
+       
+            //Cursos.find(  {title:title}, function(error,docs){
+            //    cursos = docs
+            //}  )
+            cursos =  await Cursos.find(  {title:title} ).exec()
             return cursos[0]
         },
         async getAll(rootvalue) {
@@ -30,16 +36,16 @@ const resolvers = {
             await curso.save()
             return curso
         },
-        updateCurso(rootvalue, {id,input} ){
-            const {title, views} = input
-            const pos = bdcursos.findIndex((curso)=>curso.id==id )
-            if (!pos) return null;
-            const curso = {id, ...input}
-            bdcursos[pos] = curso
+        async updateCurso(rootvalue, {id,input} ){
+            const curso = await Cursos.findByIdAndUpdate(id, input)
+            .then(()=>console.log("sale por then"))
+            .catch(()=>console.log("sale por catch"))
             return curso
         },
-        deleteCurso(rootvalue,{id}) {
-            bdcursos = bdcursos.filter((curso)=>curso.id != id )
+        async deleteCurso(rootvalue,{id}) {
+            await Cursos.deleteOne({_id:id})
+            .then(()=>console.log("sale por then"))
+            .catch(()=>console.log("sale por catch"))
             return { mensaje: `El curso con id=${id} ha sido eliminado`}
         }
     } //end Mutation

@@ -15,7 +15,7 @@ type Mensaje {
     mensaje: String
 }
 type Query {
-    getCursos(pagina:Int=0,porpagina:Int=5): [Curso]
+    getCursos(pagina:Int=1,porpagina:Int=3): [Curso]
     getCurso(title:String):Curso
     getAll:[Curso]
 }
