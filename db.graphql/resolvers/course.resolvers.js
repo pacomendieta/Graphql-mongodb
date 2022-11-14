@@ -1,7 +1,8 @@
 
 let bdcursos = [{ id:1, title:"uno", views:1000} ]
 import Cursos from "../../models/curso.js"
-let cursos;
+let cursos; 
+let curso;
 const resolvers = {
     Query:{
         async getCursos(rootvalue, args) {
@@ -31,21 +32,22 @@ const resolvers = {
     Mutation:{
         async addCurso(rootvalue, {input}) {
             const {title,views} = input
-            let curso = {title,views,id:String(bdcursos.length +1)}
+            let curso = {...input }
             curso = await Cursos.create( curso )
             await curso.save()
             return curso
         },
         async updateCurso(rootvalue, {id,input} ){
-            const curso = await Cursos.findByIdAndUpdate(id, input)
-            .then(()=>console.log("sale por then"))
-            .catch(()=>console.log("sale por catch"))
+            curso = await Cursos.findByIdAndUpdate(id, input,{returnDocument:'before'}).exec()
+            //.then((doc)=>{ console.log("sale por then"); curso=doc; console.log(doc) } ) 
+            //.catch((err)=>console.log("sale por catch",err))
+            console.log("curso:", curso)
             return curso
         },
         async deleteCurso(rootvalue,{id}) {
-            await Cursos.deleteOne({_id:id})
-            .then(()=>console.log("sale por then"))
-            .catch(()=>console.log("sale por catch"))
+            await Cursos.deleteOne({_id:id}).exec()
+            //.then(()=>console.log("sale por then"))
+            //.catch(()=>console.log("sale por catch"))
             return { mensaje: `El curso con id=${id} ha sido eliminado`}
         }
     } //end Mutation

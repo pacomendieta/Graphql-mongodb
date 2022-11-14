@@ -1,4 +1,4 @@
-
+// GraphQL Definition Types para el modelo CURSO  (Collection 'curso' en MongoDB)
 
 export default 
 `

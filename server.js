@@ -13,6 +13,8 @@ import bodyParser from 'body-parser'
 
 import courseTypes from     './db.graphql/types/course.types.js'
 import courseResolvers from './db.graphql/resolvers/course.resolvers.js'
+import usuarioTypes from     './db.graphql/types/usuario.types.js'
+import usuarioResolvers from './db.graphql/resolvers/usuario.resolvers.js'
 
 
 
@@ -33,6 +35,8 @@ type Mutation {
   fake:Boolean
 }
 `
+
+//resolvers de prueba. Abajo se añaden mas resolvers importados: courseResolvers, usuarioResolvers...
 const resolvers = {
     Query:{
         tipo(rootvalue) {
@@ -48,8 +52,8 @@ const resolvers = {
 
 
 const schema = makeExecutableSchema({
-    typeDefs: [typeDefs,courseTypes], //está combinando typeDefs y courseTypes
-    resolvers: [resolvers,courseResolvers] // está combinando resolvers con courseResolvers   
+    typeDefs: [typeDefs,courseTypes,usuarioTypes], //está combinando typeDefs y courseTypes
+    resolvers: [resolvers,courseResolvers, usuarioResolvers] // está combinando resolvers con courseResolvers   
 })
 
 const server = new ApolloServer( {schema});
