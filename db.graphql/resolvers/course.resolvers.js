@@ -1,6 +1,7 @@
 
 let bdcursos = [{ id:1, title:"uno", views:1000} ]
 import Cursos from "../../models/curso.js"
+import Usuarios from "../../models/usuario.js"
 let cursos; 
 let curso;
 const resolvers = {
@@ -25,16 +26,20 @@ const resolvers = {
             return cursos[0]
         },
         async getAll(rootvalue) {
-           let cursos = await Cursos.find()
+           let cursos = await Cursos.find().populate('usuarios').exec()
            return cursos;
         }
     },
     Mutation:{
-        async addCurso(rootvalue, {input}) {
+        async addCurso(rootvalue, {input, userid}) {
             const {title,views} = input
-            let curso = {...input }
+            let curso = {...input, usuarios:userid }
             curso = await Cursos.create( curso )
             await curso.save()
+            //Actualizar el usuario propietario del curso
+            Usuarios.findById(userid)
+            .then ((user)=>{user.cursos.push(curso); user.save()})
+            .catch((error)=>console.log("Error añadiendo curso a usurio",error))
             return curso
         },
         async updateCurso(rootvalue, {id,input} ){

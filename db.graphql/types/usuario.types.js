@@ -6,6 +6,7 @@ type Usuario {
     email: String
     hassedPassword: String
     token: String
+    cursos: [Curso]
 }
 input UsuarioInput {
     email: String!

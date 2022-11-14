@@ -23,7 +23,7 @@ const resolvers = {
             return usuarios[0]
         },
         async getAllUsuarios(rootvalue) {
-           let usuarios = await Usuarios.find()
+           let usuarios = await Usuarios.find().populate('cursos')
            return usuarios;
         }
     },

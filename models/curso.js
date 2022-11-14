@@ -5,9 +5,9 @@ import mongoose from 'mongoose'
 const cursoSchema = new mongoose.Schema({
     title: String,
     views: Number,
-    usuario: {
+    usuarios: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'usuario'
+        ref:'usuarios'
     }
 })
 

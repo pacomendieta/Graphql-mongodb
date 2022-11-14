@@ -10,6 +10,7 @@ type Curso {
     id: ID
     title: String
     views: Int
+    usuarios: Usuario
 }
 type Mensaje {
     mensaje: String
@@ -20,7 +21,7 @@ type Query {
     getAll:[Curso]
 }
 type Mutation {
-    addCurso(input:CursoInput):Curso
+    addCurso(input:CursoInput, userid:ID!):Curso
     updateCurso(id:ID, input:CursoInput):Curso
     deleteCurso(id:ID):Mensaje
 }
