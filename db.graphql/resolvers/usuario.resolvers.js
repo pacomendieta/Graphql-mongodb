@@ -1,4 +1,6 @@
+import { isObjectIdOrHexString } from "mongoose";
 import Usuarios from "../../models/usuario.js"
+import Cursos   from "../../models/curso.js"
 let usuarios; 
 let usuario;
 const resolvers = {
@@ -23,7 +25,7 @@ const resolvers = {
             return usuarios[0]
         },
         async getAllUsuarios(rootvalue) {
-           let usuarios = await Usuarios.find().populate('cursos')
+           let usuarios = await Usuarios.find().exec()
            return usuarios;
         }
     },
@@ -48,7 +50,18 @@ const resolvers = {
             //.catch(()=>console.log("sale por catch"))
             return { mensaje: `El Usuario con id=${id} ha sido eliminado`}
         }
-    } //end Mutation
+    }, //end Mutation
+    // Rellenar el campo "cursos" desde Cursos (en lugar de usar populate() )
+    Usuario: {
+        async cursos( padre ){ //Obtiene de Cursos los cursos del usuario
+                if ( padre.cursos ) {
+                    console.log("buscando Cursos.usuarios=",padre.id)
+                    //return [{title:"hola mundo"}]
+                    let c = await Cursos.find({usuarios: padre.id })
+                    return c
+                }
+        }
+    }
 }  //end resolvers
 
 export default resolvers;
