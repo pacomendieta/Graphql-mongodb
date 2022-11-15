@@ -31,9 +31,8 @@ const resolvers = {
     },
     Mutation:{
         async signUp(rootvalue, {input}) {
-            const {email,hassedPassword} = input
-            let usuario = {email, hassedPassword }
-            usuario = await Usuarios.create( usuario )
+            let usuario = new Usuarios ( input )
+            console.log('en signUp al salvar, password:', usuario.password)
             await usuario.save()
             return usuario
         },
@@ -54,12 +53,10 @@ const resolvers = {
     // Rellenar el campo "cursos" desde Cursos (en lugar de usar populate() )
     Usuario: {
         async cursos( padre ){ //Obtiene de Cursos los cursos del usuario
-                if ( padre.cursos ) {
-                    console.log("buscando Cursos.usuarios=",padre.id)
-                    //return [{title:"hola mundo"}]
-                    let c = await Cursos.find({usuarios: padre.id })
-                    return c
-                }
+            if ( padre.cursos ) {
+                let c = await Cursos.find({usuarios: padre.id })
+                return c
+            }
         }
     }
 }  //end resolvers

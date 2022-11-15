@@ -1,6 +1,7 @@
 //Model en Mongoose:  Usuario   (Collection Usuarios en MongoDB)
 
 import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 
 const userSchema=new mongoose.Schema({
     email:{type:String, required:true},
@@ -11,6 +12,22 @@ const userSchema=new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId, 
         ref: 'cursos'
     }]
+
+})
+
+// Campo password tipo virtual, no almacenable
+userSchema.virtual('password')   
+// Encriptar password justo al almacenar el usuario en la bd
+userSchema.pre('save', async function(){
+    if (this.password===undefined) return;
+    try {
+        this.hassedPassword = await bcrypt.hash(this.password, 10)
+        console.log("Pass:",this.password," ",this.hassedPassword)
+    } catch(err) {
+        console.log(error)
+        throw error
+    }
+
 
 })
 
