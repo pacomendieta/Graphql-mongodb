@@ -26,6 +26,7 @@
   "homepage": "https://github.com/pacomendieta/Graphql-mongodb#readme",
   "dependencies": {
     "@apollo/server": "^4.1.1",
+    "apollo-server-express": "^3.11.1",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "env-cmd": "^10.1.0",

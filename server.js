@@ -5,10 +5,11 @@ import mongoose from 'mongoose'
 //import { graphqlExpress, graphiqlExpress} from 'graphql-server-express'
 //import  graphiqlExpress from 'apollo-server-express'
 import { ApolloServer } from '@apollo/server';
+//import { ApolloServer } from 'apollo-server-express';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { expressMiddleware } from '@apollo/server/express4';
 //const { graphqlExpress, graphiqlExpress} = require('@apollo/server')
-import { makeExecutableSchema } from '@graphql-tools/schema'
+//import { makeExecutableSchema } from '@graphql-tools/schema'
 //import { makeExecutableSchema } from 'graphql-tools'
 import bodyParser from 'body-parser'
 
@@ -53,23 +54,29 @@ const resolvers = {
 }
 
 
-const schema = makeExecutableSchema({
-    typeDefs: [typeDefs,courseTypes,usuarioTypes], //está combinando typeDefs y courseTypes
-    resolvers: [resolvers,courseResolvers, usuarioResolvers], // todos los resolvers   
-    context: ( {req} )=>{console.log("pasa por context"); return {token:'token', currentUser:'xx'}} 
-})
+//const schema = makeExecutableSchema({
+//    typeDefs: [typeDefs,courseTypes,usuarioTypes], //está combinando typeDefs y courseTypes
+//    resolvers: [resolvers,courseResolvers, usuarioResolvers], // todos los resolvers   
+//    context:  {token:'token', currentUser:'xx'}
+//})
 
-const server = new ApolloServer( {    
+const fcontext = async({req,res})=>({xx:'gfgfg'});
+const server = new ApolloServer( {   
+
   typeDefs: [typeDefs,courseTypes,usuarioTypes], //está combinando typeDefs y courseTypes
-  resolvers: [resolvers,courseResolvers, usuarioResolvers], // todos los resolvers  });
-  context: ( {req} )=>{console.log("pasa por context"); return {token:'token', currentUser:'xx'}} 
-})
+  resolvers: [resolvers, courseResolvers, usuarioResolvers] // todos los resolvers   
+}
+)
 
-  
+
+  //HTML Tool GraphQL en stqandalone, fuera de la express app
   const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
+    listen: { port: 4000 },  context:fcontext,
+    
   });
-  console.log(`🚀  Server ready at: ${url}`);
+  console.log(`🚀  Server (HTML Tool) ready at: ${url}`);
+
+  //HTML Tool GraphQL como middleware de la express app 
   app.use('/graphql', bodyParser.json(),expressMiddleware(server))
 
 //Servir GraphiQL en /graphiql
