@@ -16,6 +16,7 @@ import courseTypes from     './db.graphql/types/course.types.js'
 import courseResolvers from './db.graphql/resolvers/course.resolvers.js'
 import usuarioTypes from     './db.graphql/types/usuario.types.js'
 import usuarioResolvers from './db.graphql/resolvers/usuario.resolvers.js'
+import getUsuarioToken from './autenticacion/token.js';
 
 
 
@@ -54,11 +55,15 @@ const resolvers = {
 
 const schema = makeExecutableSchema({
     typeDefs: [typeDefs,courseTypes,usuarioTypes], //está combinando typeDefs y courseTypes
-    resolvers: [resolvers,courseResolvers, usuarioResolvers] // está combinando resolvers con courseResolvers   
+    resolvers: [resolvers,courseResolvers, usuarioResolvers], // todos los resolvers   
+    context: ( {req} )=>{console.log("pasa por context"); return {token:'token', currentUser:'xx'}} 
 })
 
-const server = new ApolloServer( {schema});
-
+const server = new ApolloServer( {    
+  typeDefs: [typeDefs,courseTypes,usuarioTypes], //está combinando typeDefs y courseTypes
+  resolvers: [resolvers,courseResolvers, usuarioResolvers], // todos los resolvers  });
+  context: ( {req} )=>{console.log("pasa por context"); return {token:'token', currentUser:'xx'}} 
+})
 
   
   const { url } = await startStandaloneServer(server, {

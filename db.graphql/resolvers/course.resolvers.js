@@ -17,16 +17,18 @@ const resolvers = {
             return cursos
         },
 
-        async getCurso(rootvalue, {title} ) {
+        async getCurso(rootvalue, {title}, context ) {
        
             //Cursos.find(  {title:title}, function(error,docs){
             //    cursos = docs
             //}  )
             cursos =  await Cursos.find(  {title:title} ).exec()
+            console.log("Context con token y current user:", context)
             return cursos[0]
         },
-        async getAll(rootvalue) {
+        async getAll(rootvalue,xx,context) {
            let cursos = await Cursos.find().populate('usuarios').exec()
+           console.log("Context con token y current user:", context)
            return cursos;
         }
     },

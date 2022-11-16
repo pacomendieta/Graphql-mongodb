@@ -32,9 +32,18 @@ const resolvers = {
     Mutation:{
         async signUp(rootvalue, {input}) {
             let usuario = new Usuarios ( input )
-            console.log('en signUp al salvar, password:', usuario.password)
             await usuario.save()
             return usuario
+        },
+        async logIn(rootvalue, {input}) {
+            let usuario = new Usuarios ( input )
+            try {
+                const user =await Usuarios.autenticar(input)
+                return user
+            } catch(error) {
+                console.log("usuario.autenticar retorna error a logIn:", error )
+                return null
+            }
         },
         async updateUsuario(rootvalue, {id,input} ){
             usuario = await Usuarios.findByIdAndUpdate(id, input,{returnDocument:'before'}).exec()
@@ -50,7 +59,7 @@ const resolvers = {
             return { mensaje: `El Usuario con id=${id} ha sido eliminado`}
         }
     }, //end Mutation
-    // Rellenar el campo "cursos" desde Cursos (en lugar de usar populate() )
+    // Rellenar el campo "cursos" desde Cursos (en lugar de usar  mongoose .populate() )
     Usuario: {
         async cursos( padre ){ //Obtiene de Cursos los cursos del usuario
             if ( padre.cursos ) {
