@@ -12,13 +12,17 @@ const getUsuarioToken = async function ( { req }) {
     let token = null
     let currentUser=null
     let payload=null;
-    console.log("Pasa por getUsuarioToken")
     token = req.headers["authorization"]  //token jwt en la cabecera Authorization
     if  (token)
-        payload = jwt.verify(token, claves.secretoJWT) // verificar token recibido 
+        try {
+            payload = jwt.verify(token, claves.secretoJWT)//verificar token recibido(sin Bearer) 
+        } catch(error) {
+            console.log ( "Error verificando Token recibido")
+        }
+             
     if (token && payload) {  // obtener de la bd el usuario con id del token
         currentUser= await usuario.findById(payload.id)
-        if (!currentUser) throw new Error("Recibido token invalido")
+        if (!currentUser) throw "El usuario del token no existe"
     }
     //Retornar objeto Usuario y el token
     return { token, currentUser }

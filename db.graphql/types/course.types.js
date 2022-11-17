@@ -25,5 +25,10 @@ type Mutation {
     updateCurso(id:ID, input:CursoInput):Curso
     deleteCurso(id:ID):Mensaje
 }
+enum AllowedColor {
+    RED
+    GREEN
+    BLUE
+  }
 `
 
