@@ -13,11 +13,16 @@ const getUsuarioToken = async function ( { req }) {
     let currentUser=null
     let payload=null;
     token = req.headers["authorization"]  //token jwt en la cabecera Authorization
+   if (req.body.operationName=='IntrospectionQuery') return;
+   console.log('--------------------------------------------')
+   console.log('Token:',token )
     if  (token)
         try {
             payload = jwt.verify(token, claves.secretoJWT)//verificar token recibido(sin Bearer) 
-        } catch(error) {
-            console.log ( "Error verificando Token recibido")
+        } 
+        catch(error) {
+            console.log ( "Error verificando Token recibido. ")
+            return { token, currentUser }
         }
              
     if (token && payload) {  // obtener de la bd el usuario con id del token
